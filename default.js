@@ -1,3 +1,7 @@
+const port = process.env.PORT || 10001;
+const server = require("http").Server();
+var io = require("socket.io")(server);
+
 var board;
 var game;
 var socket = io();
@@ -10,14 +14,14 @@ var initGame = function() {
        position: 'start',
        onDrop: handleMove,
    };
-   
+
    board = new ChessBoard('gameBoard', cfg);
    game = new Chess();
 };
 
 var handleMove = function(source, target ) {
     var move = game.move({from: source, to: target});
-    
+
     if (move === null)  return 'snapback';
     else socket.emit('move', move);
 };
